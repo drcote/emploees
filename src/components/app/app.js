@@ -14,32 +14,48 @@ class App extends Component {
       { name: 'Alex M.', salary: '1300', increase: false, id: 2 },
       { name: 'Den X.', salary: '850', increase: false, id: 3 },
       { name: 'Eden M.', salary: '2200', increase: true, id: 4 },
-    ]
+    ],
   }
 
+  maxId = 5;
+
   deleteItem = (id) => {
-    this.setState(({data}) => {
+    this.setState(({ data }) => {
       return {
         data: data.filter(elem => elem.id !== id)
       }
     })
   }
 
- render() {
-  return (
-    <div className="app">
-      <AppInfo />
-      <div className="search-panel">
-        <SearchPanel />
-        <AppFilter />
+  insertItem = (name, salary) => {
+    const newItem = {
+      name,
+      salary,
+      increase: false,
+      id: this.maxId++
+    }
+
+    this.setState(({ data }) => ({
+      data: [...data, newItem]
+    }))
+  }
+
+  render() {
+    return (
+      <div className="app">
+        <AppInfo />
+        <div className="search-panel">
+          <SearchPanel />
+          <AppFilter />
+        </div>
+        <EmployeesList
+          data={this.state.data}
+          onDelete={this.deleteItem} />
+        <EmployeesAddForm
+          onInsert={this.insertItem} />
       </div>
-      <EmployeesList
-        data={this.state.data}
-        onDelete={id => this.deleteItem(id)} />
-      <EmployeesAddForm />
-    </div>
-  )
- }
+    )
+  }
 
 }
 
